@@ -1,0 +1,71 @@
+{
+  "agent_team_main_goal": "Analyze customer feedback and provide actionable insights for improving our product",
+  "tenant_id": "company_123",
+  "allow_TBA_to_recommend_agents": true,
+  "allow_TBA_how_many_more": 2,
+  "should_TBA_ask_caller_approval": false,
+  "agent_team_flow": "Retriever->Critic->Refiner->DecisionMaker",
+  "max_turns": 8,
+  "available_tools": [
+    "Search_Vector_DB",
+    "Search_Graph_DB",
+    "Call_Web_API",
+    "Embedding_Service"
+  ],
+  "agents": [
+    {
+      "agent_role": "Retriever",
+      "agent_name": "DataRetriever",
+      "agent_personality": "Thorough and methodical researcher",
+      "agent_goal_based_prompt": "Search and retrieve relevant customer feedback data from various sources including vector databases and knowledge graphs.",
+      "LLM_model": {
+        "model": "gpt-4",
+        "provider": "openai"
+      },
+      "allow_team_builder_to_override_model": true,
+      "LLM_configuration": {
+        "temperature": 0.3,
+        "max_tokens": 1000
+      },
+      "agent_tools": [
+        "Search_Vector_DB",
+        "Search_Graph_DB",
+        "Embedding_Service"
+      ]
+    },
+    {
+      "agent_role": "Critic",
+      "agent_name": "QualityAssurance",
+      "agent_personality": "Critical thinker who validates information quality",
+      "agent_goal_based_prompt": "Review and validate the retrieved information for accuracy, relevance, and completeness.",
+      "LLM_model": {
+        "model": "gpt-4",
+        "provider": "openai"
+      },
+      "allow_team_builder_to_override_model": false,
+      "LLM_configuration": {
+        "temperature": 0.2,
+        "max_tokens": 800
+      },
+      "agent_tools": []
+    },
+    {
+      "agent_role": "Refiner",
+      "agent_name": "InsightGenerator",
+      "agent_personality": "Creative synthesizer who connects patterns",
+      "agent_goal_based_prompt": "Analyze the validated data to generate actionable insights and recommendations for product improvement.",
+      "LLM_model": {
+        "model": "gpt-4",
+        "provider": "openai"
+      },
+      "allow_team_builder_to_override_model": true,
+      "LLM_configuration": {
+        "temperature": 0.7,
+        "max_tokens": 1200
+      },
+      "agent_tools": [
+        "Call_Web_API"
+      ]
+    }
+  ]
+}
