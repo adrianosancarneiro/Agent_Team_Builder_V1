@@ -8,7 +8,6 @@ from unittest.mock import patch, MagicMock
 
 from src.main import app
 from src.services.team_builder import TeamBuilderService, Agent
-from autogen import ConversableAgent
 
 client = TestClient(app)
 
@@ -23,7 +22,7 @@ def test_health_check():
 def test_build_team_minimal(mock_graph, mock_build_team):
     """Test building a team with minimal configuration"""
     # Mock the AutoGen agents
-    mock_agent = MagicMock(spec=ConversableAgent)
+    mock_agent = MagicMock(spec=Agent)
     mock_agent.summarize.return_value = {
         "name": "TestAgent",
         "role": "Tester",
@@ -48,7 +47,7 @@ def test_build_team_minimal(mock_graph, mock_build_team):
 def test_build_and_execute(mock_graph, mock_build_team):
     """Test the full build and execute workflow with mocks"""
     # Mock the AutoGen agents
-    mock_agent = MagicMock(spec=ConversableAgent)
+    mock_agent = MagicMock(spec=Agent)
     mock_agent.summarize.return_value = {
         "name": "AnalystAgent",
         "role": "Analyst",
@@ -59,14 +58,19 @@ def test_build_and_execute(mock_graph, mock_build_team):
     mock_build_team.return_value = {"Analyst": mock_agent}
     
     # Mock the graph execution
+    import asyncio
+    async def mock_invoke(*args, **kwargs):
+        return {
+            "final_answer": "This is the final answer",
+            "conversation_log": [
+                ("User", "Analyze customer feedback"),
+                ("Analyst", "This is the final answer")
+            ],
+            "thread_id": "test-thread-id"
+        }
+        
     mock_graph_instance = MagicMock()
-    mock_graph_instance.invoke.return_value = {
-        "final_answer": "This is the final answer",
-        "conversation_log": [
-            ("User", "Analyze customer feedback"),
-            ("Analyst", "This is the final answer")
-        ]
-    }
+    mock_graph_instance.invoke = mock_invoke
     mock_graph.return_value = mock_graph_instance
     
     config = {
@@ -98,7 +102,7 @@ def test_example_config(mock_graph, mock_build_team):
     # Mock the AutoGen agents
     mock_agents = {}
     for role in ["Retriever", "Critic", "Refiner"]:
-        mock_agent = MagicMock(spec=ConversableAgent)
+        mock_agent = MagicMock(spec=Agent)
         mock_agent.summarize.return_value = {
             "name": f"{role}Agent",
             "role": role,

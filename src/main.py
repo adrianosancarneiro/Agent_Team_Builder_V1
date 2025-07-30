@@ -35,7 +35,8 @@ def build_and_execute(config: AgentTeamConfig):
     return {
         "agent_team": team_summary,
         "conversation_log": executor.conversation_log,
-        "final_answer": final_answer
+        "final_answer": final_answer,
+        "thread_id": executor.thread_id  # Include thread_id for conversation resumption
     }
 
     # (Optional) Separate endpoint to just build team without execution
