@@ -17,13 +17,18 @@ def build_and_execute(config: AgentTeamConfig):
         team = TeamBuilderService.build_team(config)
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Invalid configuration: {e}")
-    # Log or store team info (omitted for brevity)
-    team_summary = [agent.summarize() for agent in team]
+    # Log or store team info
+    team_summary = [agent.summarize() for agent in team.values()]
 
     # Execute the conversation workflow
-    executor = TeamExecutorService(agents=team, 
-                                   flow=[agent.role for agent in team] if config.agent_team_flow is None else [s.strip() for s in config.agent_team_flow.split("->")],
-                                   max_turns=config.max_turns)
+    flow = None
+    if config.agent_team_flow:
+        flow = [s.strip() for s in config.agent_team_flow.split("->")]
+    
+    executor = TeamExecutorService(
+        agents=team, 
+        flow=flow,
+        max_turns=config.max_turns)
     final_answer = executor.run_conversation(user_query=config.agent_team_main_goal)
 
     # Return both the team details and the final answer
@@ -33,7 +38,7 @@ def build_and_execute(config: AgentTeamConfig):
         "final_answer": final_answer
     }
 
-# (Optional) Separate endpoint to just build team without execution
+    # (Optional) Separate endpoint to just build team without execution
 @app.post("/build_team")
 def build_team_endpoint(config: AgentTeamConfig):
     """
@@ -44,9 +49,7 @@ def build_team_endpoint(config: AgentTeamConfig):
         team = TeamBuilderService.build_team(config)
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Invalid configuration: {e}")
-    return {"agent_team": [agent.summarize() for agent in team]}
-
-# (Optional) Health check endpoint
+    return {"agent_team": [agent.summarize() for agent in team.values()]}# (Optional) Health check endpoint
 @app.get("/health")
 def health_check():
     return {"status": "ok"}

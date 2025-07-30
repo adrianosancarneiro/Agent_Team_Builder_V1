@@ -1,6 +1,6 @@
 # AI Team Builder Agent Service – FastAPI Implementation
 
-**Overview:** This service uses **FastAPI** to expose endpoints for building and managing an AI agent team. The architecture follows a clean, scalable structure with clear separation of concerns, leveraging **uv** for environment management instead of Docker. The Team Builder Agent uses tenant-specific context and tools to assemble a multi-agent team and orchestrate their collaboration.
+**Overview:** This service uses **FastAPI** to expose endpoints for building and managing an AI agent team. The architecture follows a clean, scalable structure with clear separation of concerns, leveraging **uv** for environment management instead of Docker. The Team Builder Agent uses tenant-specific context and tools to assemble a multi-agent team and orchestrate their collaboration using **LangGraph** for orchestration and **AutoGen** for agent implementation.
 
 Key external services (from Phase 1 infrastructure) include:
 - **Qdrant** for vector search 
@@ -63,8 +63,10 @@ AI_Team_Builder_Service/
 │ ├── config/  
 │ │ └── schema.py # Pydantic models for agent team config  
 │ ├── services/  
-│ │ ├── team_builder.py # Core logic for team assembly (Phase 1 auto-generation)  
-│ │ └── team_executor.py # Logic for running multi-agent conversations  
+│ │ ├── team_builder.py # Core logic for team assembly with AutoGen agents  
+│ │ └── team_executor.py # Logic for running multi-agent conversations with LangGraph  
+│ ├── graphs/  
+│ │ └── tenant_team_graph.py # LangGraph implementation for agent orchestration  
 │ └── tools/  
 │ ├── qdrant_tool.py # Tool interface for Qdrant vector DB  
 │ ├── graph_tool.py # Tool interface for Neo4j graph DB  
