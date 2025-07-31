@@ -23,14 +23,14 @@ sudo systemctl restart postgresql
 echo -e "\n👤 Creating user and database..."
 sudo -u postgres psql <<EOF
 CREATE ROLE postgres_user WITH LOGIN PASSWORD 'postgres_pass' CREATEDB SUPERUSER;
-CREATE DATABASE "test_DB" WITH OWNER postgres_user;
+CREATE DATABASE "agentteambuilder" WITH OWNER postgres_user;
 EOF
 
 # Wait a moment for the database to be ready
 sleep 2
 
 echo -e "\n👤 Setting permissions..."
-sudo -u postgres psql -d "test_DB" <<EOF
+sudo -u postgres psql -d "agentteambuilder" <<EOF
 GRANT USAGE ON SCHEMA public TO postgres_user;
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO postgres_user;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO postgres_user;

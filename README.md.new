@@ -1,0 +1,130 @@
+# AI Team Builder Agent Service – FastAPI Implementation
+
+**Overview:** This service uses **FastAPI** to expose endpoints for building and managing AI agent teams with PostgreSQL persistence. The architecture follows a clean, scalable structure with clear separation of concerns, leveraging **uv** for environment management, **SQLAlchemy** for database operations, and **Alembic** for migrations. The Team Builder Agent uses tenant-specific context and tools to assemble a multi-agent team and orchestrate their collaboration using **LangGraph** for orchestration and **AutoGen** for agent implementation.
+
+## Key Features
+
+- **Multi-agent team creation** with configurable roles and LLM assignments
+- **PostgreSQL persistence** for team configurations with version history
+- **Soft-deletion support** for archiving teams without data loss
+- **Configuration versioning** with rollback capability
+- **LangGraph-based** conversation execution flow
+- **AutoGen agents** with tool integration
+- **RESTful API** with comprehensive endpoints
+
+## Architecture
+
+The system integrates with:
+- **PostgreSQL** for data persistence
+- **Qdrant** for vector search 
+- **Neo4j** for graph queries
+- **Embedding model service** (BAAI/bge-base-en-v1.5)
+- **Web API access** for external data
+- **File chunking** utilities
+
+## Quick Start
+
+1. **Setup Environment**:
+   ```bash
+   ./scripts/setup_env.sh
+   ```
+
+2. **Setup PostgreSQL**:
+   ```bash
+   ./scripts/setup_postgres.sh
+   ```
+
+3. **Install Dependencies**:
+   ```bash
+   ./scripts/install_deps.sh
+   ```
+   
+4. **Run Database Migrations**:
+   ```bash
+   ./scripts/run_migrations.sh
+   ```
+
+5. **Initialize External Services** (optional):
+   ```bash
+   ./scripts/init_data.sh
+   ```
+
+6. **Run the Application**:
+   ```bash
+   ./scripts/run_app.sh
+   ```
+
+7. **Run Tests**:
+   ```bash
+   ./scripts/run_tests.sh
+   ```
+
+The API will be available at `http://localhost:8000` with automatic documentation at `http://localhost:8000/docs`.
+
+## API Endpoints
+
+- **POST `/build`** - Create a new team config and persist it
+- **POST `/execute/{team_id}`** - Execute a conversation with a saved team
+- **POST `/update_team/{team_id}`** - Update an existing team configuration
+- **DELETE `/delete_team/{team_id}`** - Soft-delete a team configuration
+- **POST `/restore_version/{team_id}/{version}`** - Rollback to a previous version
+- **GET `/version_history/{team_id}`** - Get the version history for a team
+- **GET `/teams/{team_id}`** - Get a team configuration by ID
+- **GET `/teams`** - Get all active team configurations
+- **POST `/restore_team/{team_id}`** - Restore a soft-deleted team
+
+## Development
+
+- **Install Dev Dependencies**:
+  ```bash
+  ./scripts/install_dev_deps.sh
+  ```
+
+- **Run Tests**:
+  ```bash
+  ./scripts/run_tests.sh
+  ```
+
+- **Format Code**:
+  ```bash
+  uv run black src/ tests/
+  uv run isort src/ tests/
+  ```
+
+## RTX 5090 / CUDA Compatibility
+
+If you have an RTX 5090 and see CUDA compatibility warnings, you have several options:
+
+### Option 1: Upgrade PyTorch (Recommended)
+```bash
+./scripts/upgrade_pytorch.sh
+```
+
+### Option 2: Force CPU Usage
+```bash
+export EMBEDDING_DEVICE=cpu
+```
+
+Or edit your `.env` file:
+```
+EMBEDDING_DEVICE=cpu
+```
+
+## Database Configuration
+
+The service uses PostgreSQL with the following default configuration:
+- **Host**: localhost
+- **Port**: 5432
+- **Database**: agentteambuilder
+- **Username**: postgres_user
+- **Password**: postgres_pass
+
+To customize the database connection, set the `PG_DSN` environment variable:
+```bash
+export PG_DSN="postgresql://username:password@host:port/dbname"
+```
+
+Or add it to your `.env` file:
+```
+PG_DSN=postgresql://username:password@host:port/dbname
+```

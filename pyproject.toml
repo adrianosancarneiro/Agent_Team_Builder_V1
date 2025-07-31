@@ -16,6 +16,13 @@ dependencies = [
     "langgraph>=0.1.17",
     "pyautogen>=0.2.25",
     "numpy>=1.24.0",
+    # Database dependencies
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.13.0",
+    "asyncpg>=0.29.0",
+    "psycopg>=3.1.16",
+    "psycopg2-binary>=2.9.9",
+    "python-dotenv>=1.0.0",
     # Custom PyTorch build from source
     "torch @ file:///home/mentorius/AI_Services/PyTorch_From_Source/pytorch",
 ]
