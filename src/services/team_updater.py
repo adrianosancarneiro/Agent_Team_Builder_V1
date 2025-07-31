@@ -14,7 +14,7 @@ from pydantic import UUID4
 
 from src.config.schema import AgentTeamConfig
 from src.services.team_builder import TeamBuilderService
-from src.config.db_models import AgentTeam, AgentTeamConfigVersion
+from src.config.models import AgentTeam, TenantAppConfigFile
 
 
 class TeamUpdaterService:
@@ -25,7 +25,7 @@ class TeamUpdaterService:
         """
         Update the stored team configuration for the given team_id.
         - Validates new_config via TeamBuilderService.
-        - Increments version and stores new config in AgentTeamConfigVersion.
+        - Increments version and stores new config in TenantAppConfigFile.
         - Updates the AgentTeam record's config to the new version.
         
         Args:
@@ -52,23 +52,23 @@ class TeamUpdaterService:
         TeamBuilderService.build_team(new_config)  # raises exception if invalid
         
         # 3. Determine next version number
-        last_version = session.query(AgentTeamConfigVersion) \
-                             .filter(AgentTeamConfigVersion.team_id == team_id) \
-                             .order_by(AgentTeamConfigVersion.version.desc()) \
+        last_version = session.query(TenantAppConfigFile) \
+                             .filter(TenantAppConfigFile.agent_team_id == team_id) \
+                             .order_by(TenantAppConfigFile.version.desc()) \
                              .first()
         
         new_version_number = 1 if last_version is None else last_version.version + 1
         
         # 4. Store the new config in the versions history
-        version_entry = AgentTeamConfigVersion(
-            team_id=team_id,
+        version_entry = TenantAppConfigFile(
+            agent_team_id=team_id,
             version=new_version_number,
             config_json=new_config.model_dump()
         )
         session.add(version_entry)
         
         # 5. Update the main AgentTeam record with new config
-        team.config_json = new_config.model_dump()
+        team.config_jsonb = new_config.model_dump()
         team.updated_at = datetime.now()
         
         # 6. Commit changes
@@ -108,33 +108,33 @@ class TeamUpdaterService:
             raise ValueError(f"Team ID {team_id} not found or is deleted")
         
         # 2. Find the target version entry
-        version_entry = session.query(AgentTeamConfigVersion) \
+        version_entry = session.query(TenantAppConfigFile) \
                               .filter(
-                                  AgentTeamConfigVersion.team_id == team_id,
-                                  AgentTeamConfigVersion.version == target_version
+                                  TenantAppConfigFile.agent_team_id == team_id,
+                                  TenantAppConfigFile.version == target_version
                               ).first()
         
         if not version_entry:
             raise ValueError(f"Version {target_version} not found for Team ID {team_id}")
         
         # 3. Determine next version number
-        last_version = session.query(AgentTeamConfigVersion) \
-                             .filter(AgentTeamConfigVersion.team_id == team_id) \
-                             .order_by(AgentTeamConfigVersion.version.desc()) \
+        last_version = session.query(TenantAppConfigFile) \
+                             .filter(TenantAppConfigFile.agent_team_id == team_id) \
+                             .order_by(TenantAppConfigFile.version.desc()) \
                              .first()
         
         new_version_number = last_version.version + 1
         
         # 4. Create a new version as a copy of target_version
-        new_version_entry = AgentTeamConfigVersion(
-            team_id=team_id,
+        new_version_entry = TenantAppConfigFile(
+            agent_team_id=team_id,
             version=new_version_number,
             config_json=version_entry.config_json
         )
         session.add(new_version_entry)
         
         # 5. Update AgentTeam record to use the restored config
-        team.config_json = version_entry.config_json
+        team.config_jsonb = version_entry.config_json
         team.updated_at = datetime.now()
         
         # 6. Commit changes
@@ -173,9 +173,9 @@ class TeamUpdaterService:
             raise ValueError(f"Team ID {team_id} not found or is deleted")
         
         # Get all versions for this team
-        versions = session.query(AgentTeamConfigVersion) \
-                         .filter(AgentTeamConfigVersion.team_id == team_id) \
-                         .order_by(AgentTeamConfigVersion.version.desc()) \
+        versions = session.query(TenantAppConfigFile) \
+                         .filter(TenantAppConfigFile.agent_team_id == team_id) \
+                         .order_by(TenantAppConfigFile.version.desc()) \
                          .all()
         
         # Return version summary information (without full config)

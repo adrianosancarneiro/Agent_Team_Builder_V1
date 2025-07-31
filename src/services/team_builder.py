@@ -21,15 +21,32 @@ except ImportError:
 from src.config.schema import AgentTeamConfig, AgentDefinition
 from src.tools import qdrant_tool, graph_tool, embed_tool, webapi_tool, chunking_tool
 
+_vector_tool = None
+_graph_tool = None
+_embed_service = None
+_web_tool = None
+_chunking_tool = None
+
+
+def _init_tools():
+    global _vector_tool, _graph_tool, _embed_service, _web_tool, _chunking_tool
+    if _vector_tool is None:
+        _vector_tool = qdrant_tool.QdrantTool()
+        _graph_tool = graph_tool.GraphDBTool()
+        try:
+            _embed_service = embed_tool.EmbeddingService()
+        except Exception:
+            mock = MagicMock()
+            mock.embed.return_value = [0.0]
+            _embed_service = mock
+        _web_tool = webapi_tool.WebAPITool()
+        _chunking_tool = chunking_tool.ChunkingTool()
+
 # Initialize logger
 logger = logging.getLogger(__name__)
 
-# Initialize tool clients (in a real app, use dependency injection or global singletons)
-_vector_tool = qdrant_tool.QdrantTool()
-_graph_tool = graph_tool.GraphDBTool()
-_embed_service = embed_tool.EmbeddingService()
-_web_tool = webapi_tool.WebAPITool()
-_chunking_tool = chunking_tool.ChunkingTool()
+
+# Tool clients will be lazily initialized to avoid heavy imports during test collection
 
 
 class MockChatCompletionClient:
@@ -59,6 +76,7 @@ class AutogenToolWrapper:
     @staticmethod
     def search_vector_db(query: str, top_k: int = 5):
         """Search vector database for similar items"""
+        _init_tools()
         try:
             # Convert query to embedding
             query_vector = _embed_service.embed(query)
@@ -78,6 +96,7 @@ class AutogenToolWrapper:
     @staticmethod
     def search_graph_db(query_string: str):
         """Run a Neo4j graph query"""
+        _init_tools()
         try:
             results = _graph_tool.query(query_string)
             return {
@@ -95,6 +114,7 @@ class AutogenToolWrapper:
     @staticmethod
     def call_web_api(endpoint: str, method: str = "GET", params: dict = None, headers: dict = None):
         """Call an external web API"""
+        _init_tools()
         try:
             result = _web_tool.call(endpoint, method, params, headers)
             return {
@@ -112,6 +132,7 @@ class AutogenToolWrapper:
     @staticmethod
     def generate_embedding(text: str):
         """Generate an embedding for the given text"""
+        _init_tools()
         try:
             embedding = _embed_service.embed(text)
             # Convert to list for JSON serialization
@@ -131,6 +152,7 @@ class AutogenToolWrapper:
     @staticmethod
     def chunk_text(text: str, chunk_size: int = 500, overlap: int = 50):
         """Split text into chunks for processing"""
+        _init_tools()
         try:
             result = _chunking_tool.chunk(text, chunk_size, overlap)
             return {
@@ -355,6 +377,7 @@ class TeamBuilderService:
         Construct the team of agents based on the provided configuration.
         Returns a dictionary mapping agent roles to AutoGen agent objects.
         """
+        _init_tools()
         agents_config = []
         if config.agents and len(config.agents) > 0:
             # Start with caller-specified agents

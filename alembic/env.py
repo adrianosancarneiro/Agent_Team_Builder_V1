@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
 
 # Import models for autogenerate support
-from src.config.db_models import Base
+from src.config.models import Base
 
 # Load environment variables from .env file
 load_dotenv()
