@@ -13,7 +13,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from fastapi.testclient import TestClient
 
-from src.config.db_models import Base, AgentTeam, AgentTeamConfigVersion
+from src.config.models import Base, AgentTeam, TenantAppConfigFile
 from src.config.schema import AgentTeamConfig, AgentDefinition
 from src.services.team_builder import TeamBuilderService
 from src.services.team_updater import TeamUpdaterService
@@ -69,8 +69,8 @@ def clear_database():
     """Clear all data from tables but keep the tables themselves"""
     with engine.begin() as conn:
         # Delete all data from tables in correct order to avoid constraint violations
-        conn.execute(text("DELETE FROM agent_team_config_versions"))
-        conn.execute(text("DELETE FROM agent_teams"))
+        conn.execute(text("DELETE FROM tenant_app_config_file"))
+        conn.execute(text("DELETE FROM agent_team"))
 
 # Create a shared dependency override for the entire session
 @pytest.fixture(scope="session")
@@ -128,6 +128,11 @@ def sample_tenant_id():
     return uuid.uuid4()
 
 
+@pytest.fixture
+def sample_app_id():
+    return uuid.uuid4()
+
+
 # Mock for TeamBuilderService.build_team to avoid actual model calls
 @pytest.fixture(autouse=True)
 def mock_team_builder():
@@ -145,12 +150,13 @@ def mock_team_builder():
 
 
 # Test creating a new team
-def test_create_team(client, sample_agent_config, sample_tenant_id):
+def test_create_team(client, sample_agent_config, sample_tenant_id, sample_app_id):
     # Make request to create team
     response = client.post(
         "/build",
         json={
             "tenant_id": str(sample_tenant_id),
+            "app_id": str(sample_app_id),
             "config": sample_agent_config.model_dump()
         }
     )
@@ -169,20 +175,21 @@ def test_create_team(client, sample_agent_config, sample_tenant_id):
         assert team.tenant_id == sample_tenant_id
         
         # Verify version was created
-        version = db.query(AgentTeamConfigVersion).filter(
-            AgentTeamConfigVersion.team_id == team.id
+        version = db.query(TenantAppConfigFile).filter(
+            TenantAppConfigFile.agent_team_id == team.id
         ).first()
         assert version is not None
         assert version.version == 1
 
 
 # Test retrieving a team
-def test_get_team(client, sample_agent_config, sample_tenant_id):
+def test_get_team(client, sample_agent_config, sample_tenant_id, sample_app_id):
     # Create a team first
     response = client.post(
         "/build",
         json={
             "tenant_id": str(sample_tenant_id),
+            "app_id": str(sample_app_id),
             "config": sample_agent_config.model_dump()
         }
     )
@@ -199,12 +206,13 @@ def test_get_team(client, sample_agent_config, sample_tenant_id):
 
 
 # Test updating a team
-def test_update_team(client, sample_agent_config, sample_tenant_id):
+def test_update_team(client, sample_agent_config, sample_tenant_id, sample_app_id):
     # Create a team first
     response = client.post(
         "/build",
         json={
             "tenant_id": str(sample_tenant_id),
+            "app_id": str(sample_app_id),
             "config": sample_agent_config.model_dump()
         }
     )
@@ -228,12 +236,12 @@ def test_update_team(client, sample_agent_config, sample_tenant_id):
     # Verify team was updated in database
     with TestingSessionLocal() as db:
         team = db.query(AgentTeam).filter(AgentTeam.id == uuid.UUID(team_id)).first()
-        assert team.config_json["agent_team_main_goal"] == "Updated Goal"
+        assert team.config_jsonb["agent_team_main_goal"] == "Updated Goal"
         
         # Verify version history
-        versions = db.query(AgentTeamConfigVersion).filter(
-            AgentTeamConfigVersion.team_id == team.id
-        ).order_by(AgentTeamConfigVersion.version).all()
+        versions = db.query(TenantAppConfigFile).filter(
+            TenantAppConfigFile.agent_team_id == team.id
+        ).order_by(TenantAppConfigFile.version).all()
         
         assert len(versions) == 2
         assert versions[0].version == 1
@@ -242,12 +250,13 @@ def test_update_team(client, sample_agent_config, sample_tenant_id):
 
 
 # Test version history and restoration
-def test_version_history_and_restore(client, sample_agent_config, sample_tenant_id):
+def test_version_history_and_restore(client, sample_agent_config, sample_tenant_id, sample_app_id):
     # Create a team first
     response = client.post(
         "/build",
         json={
             "tenant_id": str(sample_tenant_id),
+            "app_id": str(sample_app_id),
             "config": sample_agent_config.model_dump()
         }
     )
@@ -286,14 +295,15 @@ def test_version_history_and_restore(client, sample_agent_config, sample_tenant_
     # Verify team was restored in database
     with TestingSessionLocal() as db:
         team = db.query(AgentTeam).filter(AgentTeam.id == uuid.UUID(team_id)).first()
-        assert team.config_json["agent_team_main_goal"] == "Solve the test problem"  # Original goal
+        assert team.config_jsonb["agent_team_main_goal"] == "Solve the test problem"  # Original goal
 # Test deleting a team
-def test_delete_team(client, sample_agent_config, sample_tenant_id):
+def test_delete_team(client, sample_agent_config, sample_tenant_id, sample_app_id):
     # Create a team first
     response = client.post(
         "/build",
         json={
             "tenant_id": str(sample_tenant_id),
+            "app_id": str(sample_app_id),
             "config": sample_agent_config.model_dump()
         }
     )
@@ -320,12 +330,13 @@ def test_delete_team(client, sample_agent_config, sample_tenant_id):
 
 
 # Test restoring a deleted team
-def test_restore_deleted_team(client, sample_agent_config, sample_tenant_id):
+def test_restore_deleted_team(client, sample_agent_config, sample_tenant_id, sample_app_id):
     # Create a team first
     response = client.post(
         "/build",
         json={
             "tenant_id": str(sample_tenant_id),
+            "app_id": str(sample_app_id),
             "config": sample_agent_config.model_dump()
         }
     )
@@ -355,7 +366,7 @@ def test_restore_deleted_team(client, sample_agent_config, sample_tenant_id):
 
 
 @patch("src.services.team_executor.TeamExecutorService.run_conversation")
-def test_execute_team(mock_run_conversation, client, sample_agent_config, sample_tenant_id):
+def test_execute_team(mock_run_conversation, client, sample_agent_config, sample_tenant_id, sample_app_id):
     """Test executing a team from database"""
     # Mock the conversation result
     mock_run_conversation.return_value = "Test execution response"
@@ -365,6 +376,7 @@ def test_execute_team(mock_run_conversation, client, sample_agent_config, sample
         "/build",
         json={
             "tenant_id": str(sample_tenant_id),
+            "app_id": str(sample_app_id),
             "config": sample_agent_config.model_dump()
         }
     )

@@ -9,7 +9,7 @@ from pydantic import UUID4
 
 from sqlalchemy.orm import Session
 
-from src.config.db_models import AgentTeam
+from src.config.models import AgentTeam
 
 
 class TeamDeleterService:

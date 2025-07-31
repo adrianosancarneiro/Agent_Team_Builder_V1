@@ -6,8 +6,10 @@ This module provides SQLAlchemy session and engine setup.
 
 import os
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+
+# Import the shared declarative Base with naming conventions
+from .models.base import Base
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -22,8 +24,7 @@ engine = create_engine(PG_DSN)
 # Create session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Base class for ORM models
-Base = declarative_base()
+
 
 
 def get_db():

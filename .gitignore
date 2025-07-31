@@ -62,6 +62,7 @@ uv.lock
 
 # Model cache
 models/
+!src/config/models/
 .cache/
 
 # Test coverage

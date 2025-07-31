@@ -10,7 +10,7 @@ from src.services.team_builder import TeamBuilderService
 from src.services.team_executor import TeamExecutorService
 from src.services.team_updater import TeamUpdaterService
 from src.services.team_deleter import TeamDeleterService
-from src.config.db_models import AgentTeam, AgentTeamConfigVersion
+from src.config.models import AgentTeam, TenantAppConfigFile
 from src.config.database import get_db
 
 app = FastAPI(title="AI Team Builder Agent Service", version="2.0")
@@ -19,6 +19,7 @@ app = FastAPI(title="AI Team Builder Agent Service", version="2.0")
 class TeamCreationRequest(BaseModel):
     """Request model for team creation."""
     tenant_id: UUID4
+    app_id: UUID4
     config: AgentTeamConfig
 
 
@@ -116,14 +117,16 @@ def build_team_db(request: TeamCreationRequest, db: Session = Depends(get_db)):
     # Persist the new team config
     new_team = AgentTeam(
         tenant_id=request.tenant_id,
-        config_json=request.config.model_dump()
+        app_id=request.app_id,
+        main_goal=request.config.agent_team_main_goal,
+        config_jsonb=request.config.model_dump()
     )
     db.add(new_team)
     db.flush()  # Get new_team.id assigned
     
     # Create initial version entry (version 1)
-    version_entry = AgentTeamConfigVersion(
-        team_id=new_team.id,
+    version_entry = TenantAppConfigFile(
+        agent_team_id=new_team.id,
         version=1,
         config_json=request.config.model_dump()
     )
@@ -135,7 +138,7 @@ def build_team_db(request: TeamCreationRequest, db: Session = Depends(get_db)):
     return TeamResponse(
         id=str(new_team.id),
         tenant_id=str(new_team.tenant_id),
-        config=new_team.config_json,
+        config=new_team.config_jsonb,
         created_at=new_team.created_at.isoformat(),
         updated_at=new_team.updated_at.isoformat()
     )
@@ -159,7 +162,7 @@ def get_team(team_id: UUID4, db: Session = Depends(get_db)):
     return TeamResponse(
         id=str(team.id),
         tenant_id=str(team.tenant_id),
-        config=team.config_json,
+        config=team.config_jsonb,
         created_at=team.created_at.isoformat(),
         updated_at=team.updated_at.isoformat()
     )
@@ -181,7 +184,7 @@ def get_teams_by_tenant(tenant_id: UUID4, db: Session = Depends(get_db)):
         TeamResponse(
             id=str(team.id),
             tenant_id=str(team.tenant_id),
-            config=team.config_json,
+            config=team.config_jsonb,
             created_at=team.created_at.isoformat(),
             updated_at=team.updated_at.isoformat()
         )
@@ -208,7 +211,7 @@ def execute_team(team_id: UUID4, request: TeamExecutionRequest, db: Session = De
     
     # Parse stored config JSON back into AgentTeamConfig model
     try:
-        config = AgentTeamConfig.model_validate(team_record.config_json)
+        config = AgentTeamConfig.model_validate(team_record.config_jsonb)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Stored configuration is invalid: {str(e)}")
     
