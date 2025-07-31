@@ -35,7 +35,7 @@ class AgentTeam(Base):
                    comment="App context for this agent team (FK to app.id)")
     main_goal = Column(Text, nullable=False, comment="Primary goal or problem statement for the agent team")
     config_jsonb = Column(JSON, nullable=False, comment="Latest agent team configuration stored as JSON")
-    current_config_file_id = Column(UUID(as_uuid=True), ForeignKey('tenant_app_config_file.id'), nullable=True,
+    current_config_file_id = Column(UUID(as_uuid=True), ForeignKey('tenant_app_config_file.id', use_alter=True, name='fk_agent_team_config_file_id'), nullable=True,
                                    comment="FK to TenantAppConfigFile record representing the latest config version")
     is_deleted = Column(Boolean, default=False, nullable=False, comment="Soft-delete flag for the team (True if deleted)")
     deleted_at = Column(DateTime(timezone=True), nullable=True, comment="Timestamp when the team was soft-deleted")
