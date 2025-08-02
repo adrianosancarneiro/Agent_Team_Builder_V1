@@ -1,0 +1,510 @@
+{
+  "identity_registration": {
+    "legal_name": {
+      "description_general": "Official registered name used in statutory filings and legal contracts.",
+      "description_company_context": "",
+      "value": "",
+      "possible_values": []
+    },
+    "brand_names": {
+      "description_general": "Trading or consumer-facing names recognised by customers or regulators.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": []
+    },
+    "entity_type": {
+      "description_general": "Legal form determining liability, taxation and reporting duties.",
+      "description_company_context": "",
+      "value": "",
+      "possible_values": ["C-Corp","LLC","B-Corp","PLC","Non-profit"]
+    },
+    "founding_date": {
+      "description_general": "Date of incorporation; used for age benchmarking and anniversary comms.",
+      "description_company_context": "",
+      "value": "",
+      "possible_values": ["YYYY-MM-DD"]
+    },
+    "founders": {
+      "description_general": "Individuals who established the firm; informs origin story and equity.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": [
+        { "name":"Jane Doe","title":"Co-Founder","tenure_years":10 }
+      ]
+    },
+    "identifiers": {
+      "description_general": "Cross-database keys enabling deterministic look-ups (CIK, LEI, DUNS, etc.).",
+      "description_company_context": "",
+      "value": {
+        "CIK": "","LEI":"","DUNS":"","Tax_ID":"","UUID":""
+      },
+      "possible_values": []
+    },
+    "website_url": {
+      "description_general": "Canonical website for scraping and backlink analysis.",
+      "description_company_context": "",
+      "value": "",
+      "possible_values": ["https://example.com"]
+    },
+    "social_links": {
+      "description_general": "Official social profiles used for sentiment or reach analytics.",
+      "description_company_context": "",
+      "value": {
+        "linkedin":"","twitter":"","youtube":""
+      },
+      "possible_values": []
+    },
+    "logo_url": {
+      "description_general": "Primary brand image asset for UI rendering and CV models.",
+      "description_company_context": "",
+      "value": "",
+      "possible_values": ["https://example.com/logo.png"]
+    }
+  },
+
+  "location_footprint": {
+    "hq_address": {
+      "description_general": "Legal or main operating address; drives tax and regulatory context.",
+      "description_company_context": "",
+      "value": {
+        "street":"","city":"","country":"","lat":0,"lon":0
+      },
+      "possible_values": []
+    },
+    "additional_offices": {
+      "description_general": "List of other significant sites helpful for supply-chain or talent decisions.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": []
+    },
+    "markets_served": {
+      "description_general": "Geographic regions in which products or services are sold.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": ["US","EU","APAC","LatAm"]
+    },
+    "remote_ratio": {
+      "description_general": "Percentage of workforce that is remote/hybrid; impacts facilities and culture.",
+      "description_company_context": "",
+      "value": 0,
+      "possible_values": [0,100]
+    }
+  },
+
+  "mission_vision_values": {
+    "mission_statement": {
+      "description_general": "Concise statement of organisational purpose—the ‘why’.",
+      "description_company_context": "",
+      "value": "",
+      "possible_values": []
+    },
+    "vision_statement": {
+      "description_general": "Long-term aspirational state—the ‘north-star’.",
+      "description_company_context": "",
+      "value": "",
+      "possible_values": []
+    },
+    "core_values": {
+      "description_general": "Guiding principles shaping culture and decision filters.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": ["Integrity","Innovation","Customer-centricity"]
+    }
+  },
+
+  "strategy_objectives": {
+    "strategic_pillars": {
+      "description_general": "3-5 focus themes organising investment and prioritisation.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": ["Operational Excellence","Product Leadership","Sustainability"]
+    },
+    "company_okrs": {
+      "description_general": "Current Objectives & Key Results that align teams and measure progress.",
+      "description_company_context": "",
+      "value": [],
+      "possible_values": [
+        { "objective":"Expand ARR 20%","key_results":["Close 50 new enterprise deals","Reduce churn <5%"] }
+      ]
+    },
+    "balanced_scorecard": {
+      "description_general": "KPIs across Financial, Customer, Internal Process, Learning perspectives.",
+      "description_company_context": "",
+      "value": {
+        "financial":[],
+        "customer":[],
+        "internal_process":[],
+        "learning_growth":[]
+      },
+      "possible_values": []
+    },
+    "go_to_market_strategy": {
+      "description_general": "Channels, pricing and positioning to reach and convert customers.",
+      "description_company_context": "",
+      "value": "",
+      "possible_values": []
+    },
+    "marketing_strategy": {
+      "description_general": "Segmentation, messaging and campaign mix driving demand.",
+      "description_company_context": "",
+      "value": "",
+      "possible_values": []
+    },
+    "annual_plan": {
+      "description_general": "Top initiatives for the fiscal year with owners and budgets.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": []
+    },
+    "quarterly_plan": {
+      "description_general": "Quarter-level milestones guiding cadence and forecasting.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": []
+    }
+  },
+
+  "products_services_market": {
+    "industry_codes": {
+      "description_general": "Standardised codes (NAICS, SIC, GICS) enabling peer benchmarks.",
+      "description_company_context": "",
+      "value": { "NAICS":"","SIC":"","GICS":"" },
+      "possible_values": []
+    },
+    "product_lines": {
+      "description_general": "Catalogue of offerings with launch dates and statuses.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": [
+        { "name":"Widget X","launch_date":"2023-04-15" }
+      ]
+    },
+    "flagship_product": {
+      "description_general": "Primary revenue driver; focus for innovation and marketing.",
+      "description_company_context": "",
+      "value": "",
+      "possible_values": []
+    },
+    "target_segments": {
+      "description_general": "Buyer personas or verticals guiding product-market fit.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": ["SMB SaaS","Enterprise Finance"]
+    },
+    "top_competitors": {
+      "description_general": "Key rivals for benchmarking and strategic simulation.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": []
+    }
+  },
+
+  "people_culture_governance": {
+    "employee_count": {
+      "description_general": "Current headcount—baseline for productivity and scale metrics.",
+      "description_company_context": "",
+      "value": 0,
+      "possible_values": []
+    },
+    "leadership_team": {
+      "description_general": "C-suite roster directing strategy and culture.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": ["CEO","CFO","CTO","CPO"]
+    },
+    "board_of_directors": {
+      "description_general": "Governance body providing oversight and fiduciary duty.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": []
+    },
+    "ownership_structure": {
+      "description_general": "Equity breakdown (insiders, institutions, free-float).",
+      "description_company_context": "",
+      "value": {
+        "insiders_pct":0,
+        "institutions_pct":0,
+        "public_float_pct":0
+      },
+      "possible_values": []
+    },
+    "culture_description": {
+      "description_general": "Narrative of workplace ethos supporting talent decisions.",
+      "description_company_context": "",
+      "value": "",
+      "possible_values": []
+    },
+    "diversity_metrics": {
+      "description_general": "Representation data feeding ESG-Social analysis.",
+      "description_company_context": "",
+      "value": {
+        "gender_female_pct":0,
+        "ethnic_minority_pct":0,
+        "avg_age":0
+      },
+      "possible_values": []
+    }
+  },
+
+  "financial_snapshot": {
+    "currency": {
+      "description_general": "Reporting currency for all monetary fields.",
+      "description_company_context": "",
+      "value": "USD",
+      "possible_values": ["USD","EUR","GBP"]
+    },
+    "revenue": {
+      "description_general": "Trailing twelve-month top-line sales.",
+      "description_company_context": "",
+      "value": 0,
+      "possible_values": []
+    },
+    "gross_profit": {
+      "description_general": "Revenue minus cost of goods sold.",
+      "description_company_context": "",
+      "value": 0,
+      "possible_values": []
+    },
+    "ebitda": {
+      "description_general": "Earnings before interest, taxes, depreciation & amortisation.",
+      "description_company_context": "",
+      "value": 0,
+      "possible_values": []
+    },
+    "net_income": {
+      "description_general": "Bottom-line profit after all expenses.",
+      "description_company_context": "",
+      "value": 0,
+      "possible_values": []
+    },
+    "cash_flow_operating": {
+      "description_general": "Net cash generated from core operations.",
+      "description_company_context": "",
+      "value": 0,
+      "possible_values": []
+    },
+    "total_assets": {
+      "description_general": "Book value of assets on the balance sheet.",
+      "description_company_context": "",
+      "value": 0,
+      "possible_values": []
+    },
+    "total_liabilities": {
+      "description_general": "Sum of all debts and obligations.",
+      "description_company_context": "",
+      "value": 0,
+      "possible_values": []
+    },
+    "funding_history": {
+      "description_general": "Investment rounds and amounts raised (for private firms).",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": [
+        { "round":"Series A","date":"2024-02-01","amount_usd":10000000 }
+      ]
+    },
+    "market_cap": {
+      "description_general": "Market valuation for public companies.",
+      "description_company_context": "",
+      "value": 0,
+      "possible_values": []
+    },
+    "stock_ticker": {
+      "description_general": "Exchange symbol enabling real-time price pulls.",
+      "description_company_context": "",
+      "value": "",
+      "possible_values": []
+    },
+    "exchange": {
+      "description_general": "Trading venue with specific disclosure rules.",
+      "description_company_context": "",
+      "value": "",
+      "possible_values": ["NYSE","NASDAQ","LSE"]
+    },
+    "current_stock_price": {
+      "description_general": "Latest close price for momentum and valuation analysis.",
+      "description_company_context": "",
+      "value": 0,
+      "possible_values": []
+    },
+    "key_ratios": {
+      "description_general": "Health indicators such as ROE and debt-to-equity.",
+      "description_company_context": "",
+      "value": {
+        "roe":0,
+        "debt_to_equity":0,
+        "gross_margin_pct":0
+      },
+      "possible_values": []
+    }
+  },
+
+  "risk_compliance": {
+    "risk_factors": {
+      "description_general": "Material threats summarised from regulatory filings.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": ["Cybersecurity","Supply Chain","Regulatory Change"]
+    },
+    "regulatory_environment": {
+      "description_general": "Primary regulators and licences influencing compliance.",
+      "description_company_context": "",
+      "value": "",
+      "possible_values": []
+    },
+    "litigation_summary": {
+      "description_general": "Open legal proceedings affecting risk posture.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": []
+    },
+    "certifications": {
+      "description_general": "Standards met (e.g., ISO 27001) impacting vendor decisions.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": ["ISO 27001","SOC 2","PCI-DSS"]
+    }
+  },
+
+  "esg_sustainability": {
+    "esg_ratings": {
+      "description_general": "Third-party ESG scores indicating resilience to non-financial risks.",
+      "description_company_context": "",
+      "value": { "MSCI":"","Sustainalytics":"" },
+      "possible_values": []
+    },
+    "environmental_metrics": {
+      "description_general": "GHG emissions and resource-use data for carbon budgeting.",
+      "description_company_context": "",
+      "value": {
+        "scope1_tCO2e":0,
+        "scope2_tCO2e":0,
+        "scope3_tCO2e":0,
+        "energy_mwh":0,
+        "water_m3":0
+      },
+      "possible_values": []
+    },
+    "social_metrics": {
+      "description_general": "Employee/community impact indicators.",
+      "description_company_context": "",
+      "value": {
+        "employee_engagement_score":0,
+        "community_investment_usd":0
+      },
+      "possible_values": []
+    },
+    "governance_scores": {
+      "description_general": "Board composition & pay-link metrics used in ESG-G.",
+      "description_company_context": "",
+      "value": {
+        "board_independence_pct":0,
+        "exec_comp_esg_link_pct":0
+      },
+      "possible_values": []
+    },
+    "sustainability_certifications": {
+      "description_general": "External seals (e.g., B-Corp) validating sustainability performance.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": ["B-Corp","ISO 14001","Fair Trade"]
+    }
+  },
+
+  "operations_technology": {
+    "supply_chain_model": {
+      "description_general": "Make-vs-buy structure informing resilience analysis.",
+      "description_company_context": "",
+      "value": "",
+      "possible_values": ["In-house","Outsourced","Hybrid"]
+    },
+    "production_capacity": {
+      "description_general": "Annual throughput guiding demand/supply balance.",
+      "description_company_context": "",
+      "value": "",
+      "possible_values": []
+    },
+    "core_tech_stack": {
+      "description_general": "Critical software/hardware platforms underpinning operations.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": ["AWS","SAP","Snowflake","Kubernetes"]
+    },
+    "patent_portfolio": {
+      "description_general": "Counts or key patents signalling IP moat.",
+      "description_company_context": "",
+      "value": {
+        "total_patents":0,
+        "patents_by_domain":{}
+      },
+      "possible_values": []
+    }
+  },
+
+  "milestones_events": {
+    "timeline_events": {
+      "description_general": "Historic milestones that shape narrative and credibility.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": [
+        { "event":"IPO","date":"2018-09-15" }
+      ]
+    },
+    "upcoming_events": {
+      "description_general": "Future triggers requiring reminders or scenario planning.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": []
+    }
+  },
+
+  "external_relationships": {
+    "strategic_partners": {
+      "description_general": "Alliances or JVs expanding reach and capability.",
+      "description_company_context": "",
+      "values": [],
+      "possible_values": []
+    },
+    "investor_relations_links": {
+      "description_general": "Authoritative documents for deep RAG pulls.",
+      "description_company_context": "",
+      "value": {
+        "earnings_call_slides":"","form_10k":"","proxy_statement":""
+      },
+      "possible_values": []
+    },
+    "analyst_ratings": {
+      "description_general": "Sell-side consensus sentiment informing valuation scenarios.",
+      "description_company_context": "",
+      "value": { "buy":0,"hold":0,"sell":0 },
+      "possible_values": []
+    }
+  },
+
+  "metadata_for_ai": {
+    "last_updated": {
+      "description_general": "Timestamp enabling data staleness checks.",
+      "description_company_context": "",
+      "value": "",
+      "possible_values": ["YYYY-MM-DDThh:mm:ssZ"]
+    },
+    "data_source": {
+      "description_general": "Origin of the data for traceability and veracity scoring.",
+      "description_company_context": "",
+      "value": "",
+      "possible_values": ["SEC 10-K","Internal HRIS","Crunchbase API"]
+    },
+    "confidence_score": {
+      "description_general": "0-1 rating used by agents for weighted reasoning.",
+      "description_company_context": "",
+      "value": 0,
+      "possible_values": [0,1]
+    },
+    "schema_version": {
+      "description_general": "Versioning field preventing breaking changes across pipelines.",
+      "description_company_context": "",
+      "value": "1.0.0",
+      "possible_values": []
+    }
+  }
+}

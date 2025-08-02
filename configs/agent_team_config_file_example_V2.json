@@ -1,0 +1,260 @@
+{
+  "config_version": {
+    "description_general": "Version tag for this schema/template.",
+    "description_tenant_context": "",
+    "possible_values": ["2025-08-01", "v1.0.0"],
+    "value": "2025-08-01"
+  },
+  "last_modified": {
+    "description_general": "Timestamp when this config was last updated.",
+    "description_tenant_context": "",
+    "possible_values": ["ISO-8601 date-time"],
+    "value": ""
+  },
+
+  "agent_team_main_goal": {
+    "description_general": "One-sentence mission statement that every agent optimises for.",
+    "description_tenant_context": "",
+    "possible_values": [],
+    "value": ""
+  },
+  "supporting_objectives": {
+    "description_general": "Ordered list of OKRs or milestones that refine the main goal.",
+    "description_tenant_context": "",
+    "possible_values": [],
+    "value": []
+  },
+  "tenant_id": {
+    "description_general": "Foreign key linking to tenant/company profile JSON.",
+    "description_tenant_context": "",
+    "possible_values": ["org_123", "acme_corp"],
+    "value": ""
+  },
+  "compliance_constraints": {
+    "description_general": "Policies the team must obey (PII rules, region locks…).",
+    "description_tenant_context": "",
+    "possible_values": ["HIPAA", "GDPR", "PCI-DSS"],
+    "value": []
+  },
+  "human_in_the_loop_policy": {
+    "description_general": "Conditions & roles for soliciting human approval.",
+    "description_tenant_context": "",
+    "possible_values": ["on_low_confidence", "before_action", "never"],
+    "value": []
+  },
+
+  "agent_team_flow": {
+    "description_general": "High-level orchestration pattern (linear, graph, router).",
+    "description_tenant_context": "",
+    "possible_values": [
+      "Retriever→Critic→Refiner",
+      "Graph:{nodes:[…],edges:[…]}",
+      "DynamicRouter"
+    ],
+    "value": ""
+  },
+  "max_turns": {
+    "description_general": "Hard stop on total message exchanges in one run.",
+    "description_tenant_context": "",
+    "possible_values": ["integer ≥1"],
+    "value": null
+  },
+  "max_parallel_agents": {
+    "description_general": "Concurrency cap for simultaneous agent calls.",
+    "description_tenant_context": "",
+    "possible_values": ["integer ≥1"],
+    "value": null
+  },
+  "termination_conditions": {
+    "description_general": "Additional triggers that end execution.",
+    "description_tenant_context": "",
+    "possible_values": ["goal_reached", "budget_exhausted", "timeout"],
+    "value": []
+  },
+  "retry_strategy": {
+    "description_general": "Back-off or dead-letter rules when calls fail.",
+    "description_tenant_context": "",
+    "possible_values": ["exponential_backoff", "fixed", "none"],
+    "value": ""
+  },
+  "evaluation_hooks": {
+    "description_general": "Automatic checks (rubrics, unit tests, eval suites).",
+    "description_tenant_context": "",
+    "possible_values": ["rubric_llm", "pytest", "custom_function"],
+    "value": []
+  },
+
+  "memory_strategy": {
+    "description_general": "Global memory implementation.",
+    "description_tenant_context": "",
+    "possible_values": [
+      "sliding_window",
+      "summary_buffer",
+      "vector_store",
+      "hybrid_long_term"
+    ],
+    "value": ""
+  },
+  "memory_scope": {
+    "description_general": "Whether memory is shared or per-agent.",
+    "description_tenant_context": "",
+    "possible_values": ["shared", "per_agent", "ephemeral"],
+    "value": "shared"
+  },
+  "token_budget_per_run": {
+    "description_general": "Token cap for the whole workflow.",
+    "description_tenant_context": "",
+    "possible_values": ["integer ≥1"],
+    "value": null
+  },
+  "dollar_budget_per_run": {
+    "description_general": "Cost ceiling (USD) for one run.",
+    "description_tenant_context": "",
+    "possible_values": ["float ≥0"],
+    "value": null
+  },
+  "observability": {
+    "description_general": "Tracing/metrics provider & settings.",
+    "description_tenant_context": "",
+    "possible_values": ["Langfuse", "OpenTelemetry", "None"],
+    "value": ""
+  },
+
+  "available_tools": {
+    "description_general": "Whitelist of tool names accessible to any agent that requests them.",
+    "description_tenant_context": "",
+    "possible_values": ["Search_Vector_DB", "SQL_Query", "Web_Browse"],
+    "value": []
+  },
+
+  "agents": {
+    "description_general": "Array of agent definitions. Each element follows the sub-schema below.",
+    "description_tenant_context": "",
+    "possible_values": [],
+    "value": [
+      {
+        "agent_role": {
+          "description_general": "Agent’s functional job title.",
+          "description_tenant_context": "",
+          "possible_values": ["Retriever", "Critic", "Planner"],
+          "value": ""
+        },
+        "agent_name": {
+          "description_general": "Friendly name for logs/UI.",
+          "description_tenant_context": "",
+          "possible_values": [],
+          "value": ""
+        },
+        "agent_personality": {
+          "description_general": "Writing style or tone prompt.",
+          "description_tenant_context": "",
+          "possible_values": ["Analytical", "Playful", "Concise"],
+          "value": ""
+        },
+        "system_message": {
+          "description_general": "Long-form context or constraints given to the LLM.",
+          "description_tenant_context": "",
+          "possible_values": [],
+          "value": ""
+        },
+        "authority_level": {
+          "description_general": "Governance tier for delegation and overrides.",
+          "description_tenant_context": "",
+          "possible_values": ["supervisor", "worker", "critic", "observer"],
+          "value": ""
+        },
+
+        "LLM_model": {
+          "description_general": "Primary model specification.",
+          "description_tenant_context": "",
+          "possible_values": [
+            {"model": "gpt-4o", "provider": "openai"},
+            {"model": "mistral-large", "provider": "mistral.ai"}
+          ],
+          "value": {}
+        },
+        "LLM_configuration": {
+          "description_general": "Sampling parameters for the primary model.",
+          "description_tenant_context": "",
+          "possible_values": [
+            {"temperature": 0.2, "max_tokens": 1000, "top_p": 0.9}
+          ],
+          "value": {}
+        },
+        "fallback_models": {
+          "description_general": "Ordered list used if the primary model fails or exceeds cost.",
+          "description_tenant_context": "",
+          "possible_values": [],
+          "value": []
+        },
+        "allow_team_builder_to_override_model": {
+          "description_general": "Whether the Team-Builder Agent may swap models.",
+          "description_tenant_context": "",
+          "possible_values": [true, false],
+          "value": true
+        },
+
+        "agent_tools": {
+          "description_general": "Tools explicitly granted to this agent.",
+          "description_tenant_context": "",
+          "possible_values": ["Search_Vector_DB", "SQL_Query"],
+          "value": []
+        },
+        "tool_permissions": {
+          "description_general": "Scope of CRUD operations per tool.",
+          "description_tenant_context": "",
+          "possible_values": ["read_only", "read_write", "admin"],
+          "value": []
+        },
+        "default_tool_routing_rules": {
+          "description_general": "Regex or policy that dictates which queries invoke which tool.",
+          "description_tenant_context": "",
+          "possible_values": [],
+          "value": {}
+        },
+
+        "per_agent_memory": {
+          "description_general": "Memory type local to this agent.",
+          "description_tenant_context": "",
+          "possible_values": [
+            "buffer",
+            "summary_buffer",
+            "vector_store"
+          ],
+          "value": ""
+        },
+        "self_reflection_enabled": {
+          "description_general": "Should the agent critique itself after each run?",
+          "description_tenant_context": "",
+          "possible_values": [true, false],
+          "value": false
+        },
+        "critique_model": {
+          "description_general": "Lightweight model used exclusively for self-critique.",
+          "description_tenant_context": "",
+          "possible_values": ["gpt-3.5-turbo", "open-orca-mini"],
+          "value": ""
+        }
+      }
+    ]
+  },
+
+  "experimental_features": {
+    "description_general": "Flags enabling beta or sandbox capabilities.",
+    "description_tenant_context": "",
+    "possible_values": ["tool_specs_auto_infer", "graph_pruning"],
+    "value": []
+  },
+  "plugin_integrations": {
+    "description_general": "External systems the crew can call directly.",
+    "description_tenant_context": "",
+    "possible_values": ["Neo4j", "Weaviate", "Stripe"],
+    "value": []
+  },
+  "deprecation_notices": {
+    "description_general": "Fields scheduled for removal and their sunset date.",
+    "description_tenant_context": "",
+    "possible_values": [],
+    "value": {}
+  }
+}

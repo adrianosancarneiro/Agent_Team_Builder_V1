@@ -1,0 +1,340 @@
+{
+  "Feature": {
+    "type": "dict",
+    "description": "The primary functional area or capability discussed in the document. Each document is typically linked to one main feature.",
+    "value": {
+      "EZLEDES": {
+        "type": "string",
+        "description": "The primary functional area or capability discussed in the document. Each document is typically linked to one main feature.",
+        "path": "EZLEDES >",
+        "relatedFeatures": [
+          "TranslationDeliveryProcess",
+          "ModelFront",
+          "Trados"
+        ]
+      },
+      "ModelFront": {
+        "type": "string",
+        "description": "The primary functional area or capability discussed in the document. Each document is typically linked to one main feature.",
+        "path": "ModelFront >",
+        "relatedFeatures": [
+          "Trados",
+          "TranslationPricing",
+          "TranslationDeliveryProcess"
+        ]
+      },
+      "NetSuite": {
+        "type": "string",
+        "description": "The primary functional area or capability discussed in the document. Each document is typically linked to one main feature.",
+        "path": "NetSuite >",
+        "relatedFeatures": [
+          "PreBooking",
+          "TranslationDeliveryProcess",
+          "ResourceTracking"
+        ],
+        "subfeatures": {
+          "IntegrationApp": {
+            "type": "string",
+            "description": "A specific module or tool within NetSuite that integrates with other systems.",
+            "path": "NetSuite > IntegrationApp >",
+            "relatedFeatures": [
+              "Refactor",
+              "NetSuite"
+            ]
+          },
+          "Refactor": {
+            "type": "string",
+            "description": "A process or module related to refactoring within NetSuite.",
+            "path": "NetSuite > Refactor >",
+            "relatedFeatures": [
+              "IntegrationApp",
+              "NetSuite"
+            ]
+          }
+        }
+      },
+      "PreBooking": {
+        "type": "string",
+        "description": "The primary functional area or capability discussed in the document. Each document is typically linked to one main feature.",
+        "path": "PreBooking >",
+        "relatedFeatures": [
+          "ModelFront",
+          "Trados",
+          "TranslationPricing"
+        ],
+        "subfeatures": {
+          "OtherScenarios": {
+            "type": "string",
+            "description": "Other scenarios related to pre-booking.",
+            "path": "PreBooking > OtherScenarios >",
+            "relatedFeatures": [
+              "Vendors"
+            ]
+          },
+          "Vendors": {
+            "type": "string",
+            "description": "External vendors involved in the pre-booking process.",
+            "path": "PreBooking > Vendors >",
+            "relatedFeatures": [
+              "Trados",
+              "ResourceTracking"
+            ],
+            "subfeatures": {
+              "External": {
+                "type": "string",
+                "description": "External vendors related to pre-booking.",
+                "path": "PreBooking > Vendors > External >",
+                "relatedFeatures": [
+                  "TradosGroupshare",
+                  "Plugin"
+                ]
+              },
+              "Internal": {
+                "type": "string",
+                "description": "Internal vendors related to pre-booking.",
+                "path": "PreBooking > Vendors > Internal >",
+                "relatedFeatures": [
+                  "ResourceTracking"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "ResourceTracking": {
+        "type": "string",
+        "description": "The primary functional area or capability discussed in the document. Each document is typically linked to one main feature.",
+        "path": "ResourceTracking >",
+        "relatedFeatures": [
+          "TranslationDeliveryProcess",
+          "PreBooking"
+        ]
+      },
+      "Trados": {
+        "type": "string",
+        "description": "The primary functional area or capability discussed in the document. Each document is typically linked to one main feature.",
+        "path": "Trados >",
+        "relatedFeatures": [
+          "TradosGroupshare",
+          "TranslationPricing",
+          "ModelFront"
+        ],
+        "subfeatures": {
+          "Application": {
+            "type": "string",
+            "description": "The main application of Trados.",
+            "path": "Trados > Application >",
+            "relatedFeatures": [
+              "Plugin",
+              "Trados"
+            ]
+          },
+          "Plugin": {
+            "type": "string",
+            "description": "A plugin related to Trados.",
+            "path": "Trados > Plugin >",
+            "relatedFeatures": [
+              "Trados",
+              "ModelFront"
+            ]
+          }
+        }
+      },
+      "TradosGroupshare": {
+        "type": "string",
+        "description": "The primary functional area or capability discussed in the document. Each document is typically linked to one main feature.",
+        "path": "TradosGroupshare >",
+        "relatedFeatures": [
+          "Trados"
+        ]
+      },
+      "TranslationDeliveryProcess": {
+        "type": "string",
+        "description": "The primary functional area or capability discussed in the document. Each document is typically linked to one main feature.",
+        "path": "TranslationDeliveryProcess >",
+        "relatedFeatures": [
+          "EZLEDES",
+          "NetSuite",
+          "ModelFront"
+        ],
+        "subfeatures": {
+          "ToClient": {
+            "type": "string",
+            "description": "The process of delivering translations to clients.",
+            "path": "TranslationDeliveryProcess > ToClient >",
+            "relatedFeatures": [
+              "EZLEDES",
+              "NetSuite"
+            ]
+          },
+          "ToAgent": {
+            "type": "string",
+            "description": "The process of delivering translations to agents.",
+            "path": "TranslationDeliveryProcess > ToAgent >",
+            "relatedFeatures": [
+              "PreBooking",
+              "ResourceTracking"
+            ]
+          }
+        }
+      },
+      "TranslationPricing": {
+        "type": "string",
+        "description": "The primary functional area or capability discussed in the document. Each document is typically linked to one main feature.",
+        "path": "TranslationPricing >",
+        "relatedFeatures": [
+          "ModelFront",
+          "Trados",
+          "PreBooking"
+        ],
+        "subfeatures": {
+          "PricingQualityModifier": {
+            "type": "string",
+            "description": "A modifier related to pricing quality.",
+            "path": "TranslationPricing > PricingQualityModifier >",
+            "relatedFeatures": [
+              "ModelFront",
+              "TranslationQuality"
+            ]
+          },
+          "Human-Assisted Machine Translation (HAMT)": {
+            "type": "string",
+            "description": "Translation quality related to HAMT.",
+            "path": "TranslationPricing > Human-Assisted Machine Translation (HAMT) >",
+            "relatedFeatures": [
+              "ModelFront",
+              "Trados"
+            ]
+          },
+          "TranslationQuality": {
+            "type": "string",
+            "description": "Different aspects of translation quality.",
+            "path": "TranslationPricing > TranslationQuality >",
+            "relatedFeatures": [
+              "ModelFront",
+              "TranslationPricing"
+            ],
+            "subfeatures": {
+              "Publication": {
+                "type": "string",
+                "description": "Translation quality related to publication.",
+                "path": "TranslationPricing > TranslationQuality > Publication >",
+                "relatedFeatures": [
+                  "TranslationQuality"
+                ]
+              },
+              "Reading": {
+                "type": "string",
+                "description": "Translation quality related to reading.",
+                "path": "TranslationPricing > TranslationQuality > Reading >",
+                "relatedFeatures": [
+                  "TranslationQuality"
+                ]
+              },
+              "Reference": {
+                "type": "string",
+                "description": "Translation quality related to reference.",
+                "path": "TranslationPricing > TranslationQuality > Reference >",
+                "relatedFeatures": [
+                  "TranslationQuality"
+                ]
+              },
+              "Human-Assisted Machine Translation (HAMT)": {
+                "type": "string",
+                "description": "Translation quality related to HAMT.",
+                "path": "TranslationPricing > TranslationQuality > Human-Assisted Machine Translation (HAMT) >",
+                "relatedFeatures": [
+                  "ModelFront",
+                  "Trados"
+                ]
+              },
+              "MachineTranslation": {
+                "type": "string",
+                "description": "Translation quality related to machine translation.",
+                "path": "TranslationPricing > TranslationQuality > MachineTranslation >",
+                "relatedFeatures": [
+                  "ModelFront"
+                ]
+              },
+              "Provisional": {
+                "type": "string",
+                "description": "Provisional translation quality.",
+                "path": "TranslationPricing > TranslationQuality > Provisional >",
+                "relatedFeatures": [
+                  "TranslationQuality"
+                ]
+              },
+              "HTML": {
+                "type": "string",
+                "description": "HTML-related translation quality.",
+                "path": "TranslationPricing > TranslationQuality > HTML >",
+                "relatedFeatures": [
+                  "TranslationQuality"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "source": {
+    "type": "enum",
+    "description": "The origin or type of the document.",
+    "values": [
+      "ConfluencePage",
+      "MeetingTranscript",
+      "DemoTranscript",
+      "WalkthroughTranscript",
+      "DevOpsTicket"
+    ]
+  },
+  "staleness": {
+    "type": "enum",
+    "description": "Describes how current or outdated the document content is.",
+    "values": [
+      "Deprecated",
+      "LegacyContext",
+      "Current",
+      "InDevelopment"
+    ]
+  },
+  "staleness_score": {
+    "type": "float",
+    "description": "A value between 0 (very stale) and 1 (very fresh) estimating content freshness.",
+    "range": [
+      0.0,
+      1.0
+    ]
+  },
+  "created_by": {
+    "type": "string",
+    "description": "The name of the person who created the document or transcript."
+  },
+  "created_date": {
+    "type": "datetime",
+    "description": "The date and time the document was created (ISO 8601 format)."
+  },
+  "updated_by": {
+    "type": "string",
+    "description": "The name of the last person who updated the document."
+  },
+  "updated_date": {
+    "type": "datetime",
+    "description": "The date and time the document was last modified (ISO 8601 format)."
+  },
+  "content_type": {
+    "type": "enum",
+    "description": "Categorizes the nature of the document content.",
+    "values": [
+      "FeatureSpecificTechnical",
+      "FeatureSpecificBusiness",
+      "GeneralTechnical",
+      "GeneralBusiness"
+    ]
+  },
+  "document_title": {
+    "type": "string",
+    "description": "The title of the document, useful for display and retrieval purposes."
+  }
+}

@@ -1,0 +1,292 @@
+{
+  "app": {
+    "app_id": {
+      "description": "Stable product ID",
+      "value": "<app_id>",
+      "possible_values": [
+        "Mentorius",
+        "AcmeCRM"
+      ]
+    },
+    "name": {
+      "description": "Marketing product name",
+      "value": "<product_name>",
+      "possible_values": []
+    },
+    "owner_org": {
+      "description": "Business unit or company",
+      "value": "Mentorius Institute",
+      "possible_values": []
+    },
+    "mission": {
+      "description": "One-sentence product mission",
+      "value": "",
+      "possible_values": []
+    },
+    "default_sla": {
+      "description": "Global SLA target",
+      "value": "99.95% uptime",
+      "possible_values": []
+    },
+    "quality_standards": {
+      "description": "ISO 25010 scores or notes",
+      "value": {
+        "functional_suitability": "A",
+        "security": "B+"
+      },
+      "possible_values": []
+    },
+    "global_compliance": {
+      "description": "Org-wide control sets",
+      "value": [
+        "ISO27001-A.8.16",
+        "SOC2-CC1"
+      ],
+      "possible_values": []
+    },
+    "modules": {
+      "description": "High-level deployable services",
+      "value": [
+        "auth-svc",
+        "report-svc"
+      ],
+      "possible_values": []
+    }
+  },
+
+  "features": [
+    {
+      "feature_id": {
+        "description": "Unique key",
+        "value": "FT-1001",
+        "possible_values": []
+      },
+      "name": {
+        "description": "Feature label",
+        "value": "Scheduled Reports",
+        "possible_values": []
+      },
+      "description": {
+        "description": "Business purpose",
+        "value": "Admins can schedule emailed CSV/PDF reports",
+        "possible_values": []
+      },
+      "path": {
+        "description": "UI or API entry point",
+        "value": "/admin/reports/schedules",
+        "possible_values": []
+      },
+      "tags": {
+        "description": "Quick filters",
+        "value": [
+          "analytics",
+          "admin"
+        ],
+        "possible_values": []
+      },
+
+      "hierarchy": {
+        "parent_id": {
+          "description": "Parent feature (or null)",
+          "value": null,
+          "possible_values": []
+        },
+        "subfeature_ids": {
+          "description": "Children IDs",
+          "value": [
+            "FT-1001a",
+            "FT-1001b"
+          ],
+          "possible_values": []
+        },
+        "related_feature_ids": {
+          "description": "Lateral links",
+          "value": [
+            "FT-1020"
+          ],
+          "possible_values": []
+        }
+      },
+
+      "runtime": {
+        "feature_flag": {
+          "key": {
+            "description": "Flag name",
+            "value": "scheduled_reports_enabled",
+            "possible_values": []
+          },
+          "default_state": {
+            "description": "Default on/off",
+            "value": false,
+            "possible_values": [
+              true,
+              false
+            ]
+          },
+          "rollout_rules": {
+            "description": "Progressive delivery rules",
+            "value": "5% cohorts until 50%",
+            "possible_values": []
+          }
+        },
+        "api_endpoints": {
+          "description": "REST/gRPC paths (OpenAPI-style)",
+          "value": [
+            "POST /v1/report-schedules",
+            "GET /v1/report-schedules/{id}"
+          ],
+          "possible_values": []
+        }
+      },
+
+      "dependencies": {
+        "modules": {
+          "description": "Services it touches",
+          "value": [
+            "report-svc",
+            "auth-svc"
+          ],
+          "possible_values": []
+        },
+        "external_services": {
+          "description": "Third-party APIs",
+          "value": [
+            "SendGrid"
+          ],
+          "possible_values": []
+        },
+        "sbom_components": {
+          "description": "Key libraries",
+          "value": [
+            "cron-lib@2.1.0"
+          ],
+          "possible_values": []
+        }
+      },
+
+      "observability": {
+        "logs": {
+          "description": "Log categories",
+          "value": [
+            "report_job"
+          ],
+          "possible_values": []
+        },
+        "metrics": {
+          "description": "Prom/OpenTelemetry metric names",
+          "value": [
+            "report_schedule_jobs_total"
+          ],
+          "possible_values": []
+        },
+        "traces": {
+          "description": "Root span name",
+          "value": "ReportSchedule.run",
+          "possible_values": []
+        }
+      },
+
+      "analytics": {
+        "dau": {
+          "description": "Daily active users",
+          "value": 1250,
+          "possible_values": []
+        },
+        "p95_latency_ms": {
+          "description": "95th percentile latency",
+          "value": 900,
+          "possible_values": []
+        },
+        "nps": {
+          "description": "Sentiment score – -100..100",
+          "value": 42,
+          "possible_values": []
+        }
+      },
+
+      "security": {
+        "sensitivity_level": {
+          "description": "Data classification",
+          "value": "internal",
+          "possible_values": [
+            "public",
+            "internal",
+            "restricted"
+          ]
+        },
+        "rbac_roles_allowed": {
+          "description": "Who may use",
+          "value": [
+            "Admin",
+            "AnalyticsManager"
+          ],
+          "possible_values": []
+        },
+        "required_scopes": {
+          "description": "OAuth scopes",
+          "value": [
+            "reports.read",
+            "reports.write"
+          ],
+          "possible_values": []
+        },
+        "controls": {
+          "description": "Specific Annex A IDs",
+          "value": [
+            "ISO27001-A.8.16"
+          ],
+          "possible_values": []
+        }
+      },
+
+      "lifecycle": {
+        "version_introduced": {
+          "description": "First release",
+          "value": "2025.4.0",
+          "possible_values": []
+        },
+        "current_version": {
+          "description": "Latest appearance",
+          "value": "2025.7.1",
+          "possible_values": []
+        },
+        "release_status": {
+          "description": "Phase",
+          "value": "ga",
+          "possible_values": [
+            "idea",
+            "in-development",
+            "beta",
+            "ga",
+            "deprecated"
+          ]
+        }
+      },
+
+      "ai_rag": {
+        "embedding_id": {
+          "description": "Vector store key",
+          "value": "vec_98af...",
+          "possible_values": []
+        },
+        "context_chunks": {
+          "description": "Canonical snippets",
+          "value": [
+            "chunk_01",
+            "chunk_07"
+          ],
+          "possible_values": []
+        },
+        "docs": {
+          "description": "Design/API docs IDs",
+          "value": [
+            "design-doc-123"
+          ],
+          "possible_values": []
+        }
+      },
+
+      "subfeatures": []
+    }
+  ]
+}
