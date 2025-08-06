@@ -1,0 +1,262 @@
+[
+    {
+        "NodeType": "tenant",
+        "value": "company_123",
+        "Properties": {
+            "id": "str",
+            "description_general": "Unique identifier for the tenant, usually the company or tenant name."
+        },
+          
+        "Relationships": {
+            "HAS_DOMAIN": {
+                "target": "Domain"
+            }
+        }
+
+    },
+    
+    
+    {
+        "NodeType": "Domain",
+        "descriptionToCreateCypherCode": "Each company can have one or more domains. Those domains are used to tenant/company higher level domain knowledge such as apps, features, subfeatures, related features, how they are connected. But it is not only limited to apps, it also can include other company domains higher knowledge suce as company policies, procedures, department structure mission, goal, projects, strategies, etc. Each domain has a unique id and is connected to a collection (tenant/company). The domain are used increase the Team Builder Agent (TBA) knowledge about a specific domain for what the company is trying to create an agent team to eventually fix a problem or get it done something. The TBA uses this knowledge to build the agent team and to recommend agents based on the domain knowledge. Leaf or branch node. Each property has to be connected to an app. Properties include name, type and description. relatedTo are features that are RELATED_TO his feature, not necessarily subfeatures. Related features have to be one of the features in the graph added under the same collection(company). This is used to build the graph structure.",  
+        "Properties": {
+                        "name": "str", 
+                        "id": "str", 
+                        "description": "str", 
+                        "collection_id": "str",
+                        
+                        ????
+                        "related_to_features": "list [str]",
+                        "related_to_chunks": "list [str]",
+                        "related_to_domains": "list [str]"
+                        ????
+                    }
+    },
+    {
+        "NodeType": "Chunk",
+        "descriptionToCreateCypherCode": "The chunk of text and its metadata tags based on the document is has being chunked from. relatedToFeatures are features that this chunk is RELATED_TO. This have to be one of the features in the graph added under the same collection(company). This is used to build the graph structure.",
+        "Properties": {
+            "chunk_id": {
+                "type": "string",
+                "value": "chunk_1",
+                "descriptionToCreateCypherCode": "Unique identifier for the chunk."
+            },
+            "relatedToDomains": ["DomainA", "DomainB"],
+            "source": {
+                "type": "string",
+                "possibleValues": ["confluence_page", "github_repo", "devops_ticket"],
+                "value": "ConfluencePage",
+                "descriptionToCreateCypherCode": "The origin or type of the document. possibleValues is a list of possible sources like 'ConfluencePage', 'GitHubRepo', 'DevOpsTicket' etc. this is going to be defined by collection_name(company) and app_name"
+            },
+            "staleness": {
+                "type": "string",
+                "possibleValues": ["deprecated", "legacy_context", "current", "in_development"],
+                "value": "current",
+                "descriptionToCreateCypherCode": "Describes how current or outdated the document content is. possibleValues is a list of possible staleness values like 'Deprecated', 'LegacyContext', 'Current', 'InDevelopment'. This is used to determine how fresh the content is. and each collection_name(company) and app_name will have a different set of possible values."
+            },
+            "staleness_score": {
+                "type": "float",
+                "range": [0.0, 1.0],
+                "value": 0.8,
+                "descriptionToCreateCypherCode": "A value between 0 (very stale) and 1 (very fresh) estimating content freshness."
+            },
+            "created_by": {
+                "type": "string",
+                "value": "John Doe",
+                "descriptionToCreateCypherCode": "The name of the person who created the document or transcript."
+            },
+            "created_date": {
+                "type": "datetime",
+                "value": "2023-01-01T00:00:00Z",
+                "descriptionToCreateCypherCode": "The date and time the document was created (ISO 8601 format)."
+            },
+            "updated_by": {
+                "type": "string",
+                "value": "Jane Smith",
+                "descriptionToCreateCypherCode": "The name of the last person who updated the document."
+            },
+            "updated_date": {
+                "type": "datetime",
+                "value": "2023-01-02T00:00:00Z",
+                "descriptionToCreateCypherCode": "The date and time the document was last modified (ISO 8601 format)."
+            },
+            "content_type": {
+                "type": "string",
+                "possibleValues": ["feature_specific_technical", "feature_specific_business", "general_technical", "general_business"],
+                "value": "feature_specific_technical",
+                "descriptionToCreateCypherCode": "Categorizes the nature of the document content. possibleValues is a list of possible content types like 'FeatureSpecificTechnical', 'FeatureSpecificBusiness', 'GeneralTechnical', 'GeneralBusiness'. This helps in understanding the context and focus of the document. Each collection_name(company) and app_name will have a different set of possible values."
+            },
+            "document_title": {
+                "type": "string",
+                "value": "Feature_Overview_Document.pdf",
+                "descriptionToCreateCypherCode": "The title of the document from which the chunk was extracted, useful for display and retrieval purposes."
+            },
+            "document_id": {
+                "type": "string",
+                "value": "doc_123",
+                "descriptionToCreateCypherCode": "The unique identifier for the document from which the chunk was extracted, useful for display and retrieval purposes."
+            },
+            "document_location": {
+                "type": "string",
+                "possibleValues": ["sqlDB", "object_storage"],
+                "value": "sqlDB",
+                "descriptionToCreateCypherCode": "Indicates where the document is stored. The main rule to follow is that all documents that after compress approaches applied are larger than 4kb should be stored in object storage(MinIO), otherwise they can be stored in SQL DB."
+            },
+            "agent_fail_count": {
+                "type": "integer",
+                "value": 0,
+                "descriptionToCreateCypherCode": "Number of times the Critic Agent flagged this chunk as failing to satisfy a query or having low relevance."
+            },
+            "agent_success_count": {
+                "type": "integer",
+                "value": 5,
+                "descriptionToCreateCypherCode": "Number of times the Critic Agent confirmed this chunk was successfully used for a query."
+            },
+            "last_agent_use_successfully_date": {
+                "type": "datetime",
+                "value": "2023-01-03T00:00:00Z",
+                "descriptionToCreateCypherCode": "The date and time the chunk was last successfully used by an agent."
+            },
+            "last_agent_staleness_score": {
+                "type": "float",
+                "range": [0.0, 1.0],
+                "value": 0.8,
+                "descriptionToCreateCypherCode": "The most recent staleness score assigned by the Critic Agent. Confidence score from the Critic Agent indicating how fresh or relevant the chunk is. Lower values mean higher staleness."
+            },
+            "last_agent_staleness_avg_score": {
+                "type": "float",
+                "range": [0.0, 1.0],
+                "descriptionToCreateCypherCode": "Running average of staleness scores for this chunk, calculated as (last_agent_staleness_avg_score + last_agent_staleness_score) / (agent_fail_count + agent_success_count)."
+            },
+            "agent_status_flag": {
+                "type": "string",
+                "possibleValues": ["string"],
+                "descriptionToCreateCypherCode": "Status flag set by the system based on agent_fail_count and agent_staleness_score. Indicates if the chunk is active, deprecated, or low-confidence. possibleValues is a list of possible status flags like 'Active', 'Deprecated', 'LowConfidence'. This helps in managing chunk lifecycle and retrieval. Each collection_name(company) and app_name will have a different set of possible values."
+            }
+        }
+    },
+    {
+        "NodeType": "Agent",
+        "descriptionToCreateCypherCode": "An agent is a specialized component of the RAG pipeline responsible for specific tasks. It helps track which agent created/used/updated what data (queries, chunks, etc.)",
+        "Properties": {
+            "agent_id": {
+                "type": "string",
+                "value": "agent_1",
+                "descriptionToCreateCypherCode": "Unique identifier for the agent instance (could include version)."
+            },
+            "agent_version": {
+                "type": "string",
+                "value": "1.0",
+                "descriptionToCreateCypherCode": "Version of the agent, useful for tracking changes and updates."
+            },
+            "name": {
+                "type": "string",
+                "value": "Agent One",
+                "descriptionToCreateCypherCode": "The display name or alias of the agent)."
+            },
+            "type": {
+                "type": "string",
+                "possibleValues": ["feature_specific_technical", "feature_specific_business", "general_technical", "general_business"],
+                "descriptionToCreateCypherCode": "The category of the agent, defining its function. possibleValues is a list of possible agent types like 'RetrievalAgent', 'CriticalAgent', 'RefinerAgent'. This helps in understanding the role of the agent. Each collection_name(company) and app_name will have a different set of possible values."
+            },
+            "collection_name": {
+                "type": "string",
+                "value": "company_123",
+                "descriptionToCreateCypherCode": "The company or tenant this agent belongs to."
+            },
+            "related_to_domains": {
+                "type": "list[str]",
+                "value": ["app_456", "app_789", "department_marketing"],
+                "descriptionToCreateCypherCode": "The domains this agent referes to in order to get higher level knowledge about the teanant/company. If the agent needs more information, it can query chunks and features related to these domains."
+            },
+            "created_date": {
+                "type": "datetime",
+                "value": "2023-01-01T00:00:00Z",
+                "descriptionToCreateCypherCode": "When this agent configuration/version was created."
+            }
+        }
+    },
+    {
+        "NodeType": "Query",
+        "descriptionToCreateCypherCode": "Represents a query executed by an agent to retrieve information. Connected to retrieval results and scores. It is the search question the user (or Refiner Agent) generated — used for learning which reformulations work best over time.",
+        "Properties": {
+            "query_id": {
+                "type": "string",
+                "value": "query_123",
+                "descriptionToCreateCypherCode": "Unique identifier for the query."
+            },
+            "collection_name": {
+                "type": "string",
+                "value": "company_123",
+                "descriptionToCreateCypherCode": "The company/tenant associated with the query."
+            },
+            "related_to_domains": {
+                "type": "list[str]",
+                "possibleValues": ["app_456", "app_789", "department_marketing"],
+                "value": ["app_456", "app_789", "department_marketing"],
+                "descriptionToCreateCypherCode": "The domains this query is related to, providing context for the query. "
+            },
+            "query_text": {
+                "type": "string",
+                "value": "What are the latest customer feedback trends?",
+                "descriptionToCreateCypherCode": "The natural language query issued by the user or agent."
+            },
+            "query_type": {
+                "type": "string",
+                "possibleValues": ["RefinedQuery", "UserQuery"],
+                "descriptionToCreateCypherCode": "The type of query, indicating its purpose. possibleValues is a list of possible query types like 'RefinedQuery', 'UserQuery'. This helps in understanding the origin and context of the query."
+            },
+            "source_question_id": {
+                "type": "string",
+                "value": "What are the latest customer feedback trends?",
+                "descriptionToCreateCypherCode": "The original user question this refined query is based on."
+            },
+            "source_question_query_id": {
+                "type": "string",
+                "descriptionToCreateCypherCode": "The ID of the query this question is related to. It's the original user's question the one that started the whole process. This raw question might not work well for retrieval. So your Refiner Agent improves or rewrites it in this case the type is 'RefinedQuery'. This helps in tracking the evolution of queries and their relationships."
+            },
+            "query_created_date": {
+                "type": "datetime",
+                "descriptionToCreateCypherCode": "When the query was created."
+            },
+            "query_created_by_agent_id": {
+                "type": "string",
+                "value": "agent_123",
+                "descriptionToCreateCypherCode": "The agent who created this query (linked to Agent node). This helps track which agent generated the query. Make sure to use the agent_id from the Agent node under the same collection_name(company) and app_name."
+            }
+        },
+        "Relationships": {
+            "RETRIEVED": {
+                "target": "Chunk",
+                "properties": {
+                    "retrieval_score_count": {
+                        "type": "integer",
+                        "descriptionToCreateCypherCode": "Number of times this chunk was evaluated by an agent as a possible option to answer a query/user question."
+                    },
+                    "current_retrieval_score": {
+                        "type": "float",
+                        "descriptionToCreateCypherCode": "Score given by the agent to this chunk for this specific query. Useful for feedback and learning."
+                    },
+                    "avg_retrieval_score": {
+                        "type": "float",
+                        "range": [0.0, 1.0],
+                        "descriptionToCreateCypherCode": "Running average of retrieval scores for this query→chunk combination. To efficiently update without recalculating all scores, use: new_avg_score = ((old_avg_score * retrieval_score_count) + new_score) / (retrieval_score_count + 1), where new_score is the latest retrieval score and retrieval_score_count is the number of previous scores. This approach is suitable for streaming systems or when score_count is stored."
+                    },
+                    "retrieval_created_date": {
+                        "type": "datetime",
+                        "descriptionToCreateCypherCode": "When the query was created."
+                    },
+                    "retrieval_created_by_agent_id": {
+                        "type": "string",
+                        "descriptionToCreateCypherCode": "The agent who created this query (linked to Agent node). This helps track which agent generated the query. Make sure to use the agent_id from the Agent node under the same collection_name(company) and app_name."
+                    },
+                    "retrieval_strategy": {
+                        "type": "string",
+                        "possibleValues": ["BM25", "DenseEmbedding", "Hybrid", "GraphExpansion"],
+                        "descriptionToCreateCypherCode": "The type of retrieval logic used by the agent. possibleValues is a list of possible retrieval strategies like 'BM25'(Keyword Search - Think of it like a librarian flipping through a card catalog. Works well when You have exact wording or Keywords are important), 'DenseEmbedding'(Semantic Search - This is like asking someone who understands the meaning of your question. Works well when You want to find similar concepts or ideas. When your question is vague or written differently and You want smart, language-aware results), 'Hybrid'(This is like using both the librarian and a smart assistant. Works well when You need the best of both worlds), 'GraphExpansion'(This is like exploring a map of relationships instead of just searching. Uses graph structure to expand search. Works well when You want to leverage relationships between data points. Works well when Concepts are related by structure (like features, modules). You have a graph DB like Neo4j with feature hierarchies). This helps in understanding the retrieval method used for this query."
+                    }
+                }
+            }
+        }
+    }
+]
